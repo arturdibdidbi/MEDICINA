@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulário de Marcação de Consulta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+    fieldset { margin-top: 15px; padding: 10px; }
+    .radio-group, .checkbox-group { display: flex; flex-direction: column; }
+    .submit-btn { margin-top: 20px; padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h1>Marcação de Consulta</h1>
+
+  <form action="#" method="post" onsubmit="return validarFormulario()" novalidate>
+
+    <label for="nome">Nome completo*</label>
+    <input type="text" id="nome" name="nome" required aria-required="true">
+
+    <label for="email">E-mail*</label>
+    <input type="email" id="email" name="email" required aria-required="true">
+
+    <label for="telefone">Telefone (somente números, mínimo 10 dígitos)*</label>
+    <input type="tel" id="telefone" name="telefone" pattern="[0-9]{10,}" required aria-required="true">
+
+    <label for="especialidade">Especialidade*</label>
+    <select id="especialidade" name="especialidade" required aria-required="true">
+      <optgroup label="Clínicas">
+        <option value="cardiologia">Cardiologia</option>
+        <option value="dermatologia">Dermatologia</option>
+        <option value="ortopedia">Ortopedia</option>
+        <option value="psicologia">Psicologia</option>
+        <option value="ginecologia">Ginecologia</option>
+      </optgroup>
+      <optgroup label="Odontologia">
+        <option value="aparelho">Instalação de aparelho dentário</option>
+        <option value="extracao">Extração de dente</option>
+      </optgroup>
+    </select>
+
+    <label for="data">Data da consulta*</label>
+    <input type="date" id="data" name="data" required aria-required="true" min="{{hoje}}">
+
+    <fieldset>
+      <legend>Período do dia*</legend>
+      <div class="radio-group">
+        <label><input type="radio" name="periodo" value="manha" required> Manhã</label>
+        <label><input type="radio" name="periodo" value="tarde"> Tarde</label>
+        <label><input type="radio" name="periodo" value="noite"> Noite</label>
+      </div>
+    </fieldset>
+
+    <label for="sintomas">Sintomas principais (mínimo de 10 caracteres)*</label>
+    <textarea id="sintomas" name="sintomas" minlength="10" required aria-required="true"></textarea>
+
+    <label>
+      <input type="checkbox" id="termos" name="termos" required aria-required="true">
+      Aceito os termos e condições*
+    </label>
+
+    <fieldset>
+      <legend>Como foi sua experiência com a marcação?</legend>
+      <div class="radio-group">
+        <label><input type="radio" name="opiniao" value="excelente" required> Excelente</label>
+        <label><input type="radio" name="opiniao" value="boa"> Boa</label>
+        <label><input type="radio" name="opiniao" value="ruim"> Ruim</label>
+        <label>
+          <input type="radio" name="opiniao" value="outra">
+          Outras (informe abaixo):
+        </label>
+      </div>
+      <textarea id="opiniaoOutros" name="opiniaoOutros" placeholder="Descreva aqui, se necessário..."></textarea>
+    </fieldset>
+
+    <button type="submit" class="submit-btn">Enviar</button>
+  </form>
+
+  <script>
+    // Define a data mínima como hoje
+    document.addEventListener("DOMContentLoaded", function () {
+      const hoje = new Date().toISOString().split("T")[0];
+      document.getElementById("data").setAttribute("min", hoje);
+    });
+
+    function validarFormulario() {
+      const sintomas = document.getElementById("sintomas").value;
+      if (sintomas.trim().length < 10) {
+        alert("Por favor, descreva os sintomas com pelo menos 10 caracteres.");
+        return false;
+      }
+
+      const telefone = document.getElementById("telefone").value;
+      if (!/^\d{10,}$/.test(telefone)) {
+        alert("O telefone deve conter apenas números e ter no mínimo 10 dígitos.");
+        return false;
+      }
+
+      if (!document.getElementById("termos").checked) {
+        alert("Você precisa aceitar os termos para continuar.");
+        return false;
+      }
+
+      return true;
+    }
+  </script>
+</body>
+</html>
